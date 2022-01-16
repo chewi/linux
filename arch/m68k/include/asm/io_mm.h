@@ -67,6 +67,15 @@
 #endif
 #endif /* AMIGA_PCMCIA */
 
+#ifdef CONFIG_VIRT
+#ifndef MULTI_ISA
+#define MULTI_ISA 0
+#else
+#undef MULTI_ISA
+#define MULTI_ISA 1
+#endif
+#endif /* CONFIG_VIRT */
+
 #ifdef CONFIG_ATARI_ROM_ISA
 
 #define enec_isa_read_base  0xfffa0000
@@ -177,7 +186,7 @@ static inline u8 __iomem *isa_mtb(unsigned long addr)
 #ifdef CONFIG_ATARI_ROM_ISA
     case ISA_TYPE_ENEC: return (u8 __iomem *)ENEC_ISA_MEM_B(addr);
 #endif
-    default: return NULL; /* avoid warnings, just in case */
+    default: return (u8 __iomem *)addr;
     }
 }
 static inline u16 __iomem *isa_mtw(unsigned long addr)
@@ -193,7 +202,7 @@ static inline u16 __iomem *isa_mtw(unsigned long addr)
 #ifdef CONFIG_ATARI_ROM_ISA
     case ISA_TYPE_ENEC: return (u16 __iomem *)ENEC_ISA_MEM_W(addr);
 #endif
-    default: return NULL; /* avoid warnings, just in case */
+    default: return (u16 __iomem *)addr;
     }
 }
 
